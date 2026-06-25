@@ -1,0 +1,4 @@
+requests>=2.31
+python-dotenv>=1.0
+# added later, when you build the UI (Phase 2 step 5):
+# gradio>=4.0
