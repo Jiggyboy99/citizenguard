@@ -265,7 +265,14 @@ CSS = """
 footer { display:none !important; }
 """
 
-with gr.Blocks(title="CitizenGuard") as demo:
+# Gradio 6 moved css/theme from Blocks() to launch(); 5 keeps them on Blocks().
+# Detect the version so this app runs identically on either.
+_GRADIO_MAJOR = int(gr.__version__.split(".")[0])
+_STYLE = {"css": CSS, "theme": gr.themes.Base()}
+_blocks_kw = {} if _GRADIO_MAJOR >= 6 else _STYLE
+_launch_kw = _STYLE if _GRADIO_MAJOR >= 6 else {}
+
+with gr.Blocks(title="CitizenGuard", **_blocks_kw) as demo:
     gr.HTML(
         "<div id='cg-head'>"
         "<div id='cg-eyebrow'>AI VERIFICATION CONSOLE</div>"
@@ -305,4 +312,4 @@ with gr.Blocks(title="CitizenGuard") as demo:
     btn.click(run, inputs=[report, city], outputs=[result_out, chart_out, readings_out])
 
 if __name__ == "__main__":
-    demo.launch(css=CSS, theme=gr.themes.Base())
+    demo.launch(**_launch_kw)
